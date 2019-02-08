@@ -1,7 +1,6 @@
 from datetime import datetime 
 from skyfield.api import Topos, load 
 from _thread import * 
-from encode import Image, Files
 
 import threading 
 import select 
@@ -17,9 +16,11 @@ def recv_data():
             print_lock.release()
             break 
 
-        buff = buff[::-1] 
-        print(buff)
-
+        #buff = buff[::-1]
+        buff = buff.decode('ISO-8859-1')
+        buff = buff.split("\xf0")
+        buff = buff[1]
+        buff = buff[0:(len(buff)-1)] 
 
 def get_az_el(): 
 

@@ -1,0 +1,10 @@
+# Files 
+*.tar.gz
+*.wav
+
+# dir 
+qsstv_9.2.6/
+bin/
+include/
+lib/
+docs/

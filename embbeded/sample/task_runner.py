@@ -7,7 +7,7 @@ class task_runner :
     def __init__(self, callsign) : 
         self.callsign = callsign
         self.picture_fifo = picture_fifo()
-        self.image = image(sstv_mode, self.pictures)
+        self.image = image(sstv_mode, self.picture_fifo)
 
     def parse_command(self, callsign, message) :
         print(callsign)

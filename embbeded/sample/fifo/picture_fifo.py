@@ -2,7 +2,7 @@ from collections import deque
 
 class picture_fifo : 
 
-    def __init__():
+    def __init__(self):
         self.pictures = deque()
 
     def append(picture):
@@ -14,5 +14,5 @@ class picture_fifo :
         except IndexError : 
             print("Empty FIFO")
 
-    def get_size() 
+    def get_size(): 
         return len(self.pictures)

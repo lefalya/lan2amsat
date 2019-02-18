@@ -14,9 +14,9 @@ class image:
         with open(image_path, 'r+b') as f: 
             with PIL.Image.open(f) as image : 
                 cover = resizeimage.resize_cover(image, self.get_size(mode))
-                cover.save("./capture/cap_res.jpg", image.format)
+                cover.save("../capture/cap_res.jpg", image.format)
 
-        os.system("./shell/send_sstv.sh ../capture/cap_res.jpg "+mode)
+        os.system("../shell/send_sstv.sh ../capture/cap_res.jpg "+mode)
    
     def get_size(self,mode): 
         return {
@@ -28,8 +28,8 @@ class image:
         print("capture !")        
         camera = cv2.VideoCapture(0) 
         return_val, img = camera.read() 
-        cv2.imwrite("./capture/"+self.cv2_filename,img) 
-        self.transmit("./capture/"+self.cv2_filename, self.mode) 
+        cv2.imwrite("../capture/"+self.cv2_filename,img) 
+        self.transmit("../capture/"+self.cv2_filename, self.mode) 
 
 if __name__ == "__main__" : 
     image_client = image('Robot36', '')

@@ -1,6 +1,7 @@
 # Files 
 *.tar.gz
 *.wav
+*.pyc
 
 # dir 
 qsstv_9.2.6/

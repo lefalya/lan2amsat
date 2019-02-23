@@ -39,7 +39,7 @@ class main :
         self.sstv_mode = "Robot36"
 
     def set_frequency(self) : 
-        radio.get_corrected_frequency(self.distance)
+       radio.correct_doppler(self.distance)
 
     def recv_data(self):
         while True : 

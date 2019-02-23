@@ -19,3 +19,5 @@ class task_runner :
     def execute(self, message):
         if message == "CAPTURE" : 
             self.image.capture()
+            
+            

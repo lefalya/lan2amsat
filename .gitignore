@@ -1,7 +1,11 @@
 # Files 
 *.tar.gz
 *.wav
-*.pyc
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
 
 # dir 
 qsstv_9.2.6/
@@ -9,4 +13,3 @@ bin/
 include/
 lib/
 docs/
-__pycache__/

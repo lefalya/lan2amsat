@@ -16,8 +16,7 @@ class gqrx :
             delta_f = relative_velocity * self.center_frequency/c 
             corrected_frequency = (self.center_frequency + (-1*delta_f))
 
-            print("doppler : ", -1*delta_f)
-            print("corrected freq : ", corrected_frequency)
+            print("doppler : ", -1*delta_f," corrected freq : ", corrected_frequency, end="\r")
             return corrected_frequency 
 
     def correct_doppler(self, distance):

@@ -12,6 +12,7 @@ import schedule
 import threading 
 import select 
 import socket 
+import os 
 
 # distance between station and passing satellite 
 dis = 0 
@@ -25,7 +26,7 @@ qdis = deque(maxlen=2)
 print_lock = threading.Lock()
     
 # delta time in second 
-deltaT = 1 
+deltaT = 1
 
 # satellite center frequency 
 center_frequency = 435880000 #Hz
@@ -93,7 +94,9 @@ class main :
 
             if str(el) != el_last :
                 print("\n")
-                print(el, az, distance.m)
+                print("elevation    : ", el)
+                print("azimuth      : ", az) 
+                print("slant range  : ", distance.m)
                 el_last = str(el)
 
 if __name__ == "__main__": 

@@ -41,7 +41,7 @@ class main :
 
     def set_frequency(self) : 
         print("set freq")
-       radio.correct_doppler(self.distance)
+        radio.correct_doppler(self.distance)
 
     def recv_data(self):
         while True : 

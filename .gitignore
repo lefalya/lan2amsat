@@ -1,6 +1,8 @@
 # Files 
 *.tar.gz
 *.wav
+*.jpg
+
 active.txt
 Leap_Second.dat
 deltat.preds

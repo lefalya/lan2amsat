@@ -6,6 +6,7 @@ from scipy.constants import c
 
 from module import direwolf 
 from module import gqrx 
+from module import tle
 from task_runner import task_runner
 
 import schedule
@@ -36,11 +37,14 @@ class main :
     def __init__(self):
         self.distance = 0 
         self.callsign = "YDE2E"
-        self.task = task_runner(self.callsign)
+        self.task = task_runner(
+                main = self,
+                callsign = self.callsign
+                )
         self.sstv_mode = "Robot36"
+        self.calculate_az_el = True
 
     def set_frequency(self) : 
-        print("set freq")
         radio.correct_doppler(self.distance)
 
     def recv_data(self):
@@ -60,21 +64,16 @@ class main :
 
         # last elevation
         el_last = ''
-
-        # satellite's  obital element 
-        TLE = 'http://www.celestrak.com/NORAD/elements/active.txt'
-
-        # load all listed satellites 
-        satellites = load.tle(TLE) 
-
-        # get LAPAN-A2 TLE 
-        satellite = satellites['LAPAN-A2']
-        print(satellite)
         
         schedule.every(deltaT).seconds.do(self.set_frequency)
 
-        while True : 
+        while True and self.calculate_az_el :  
             schedule.run_pending()
+
+            # satellite's  obital element 
+            tl = tle()
+            satellite = tl.satellite
+
             ts = load.timescale() 
             t = ts.utc(datetime.utcnow().year, 
                        datetime.utcnow().month, 
@@ -95,6 +94,7 @@ class main :
 
             if str(el) != el_last :
                 print("\n")
+                print(satellite)
                 print("elevation    : ", el)
                 print("azimuth      : ", az) 
                 print("slant range  : ", distance.m)

@@ -1,4 +1,5 @@
 import RPi.GPIO as GPIO 
+import time
 import datetime 
 from collections import deque 
 
@@ -10,15 +11,9 @@ P2 = 13
 AOS_SAT = 15
 CAMERA_CAPTURE = 12 
 
-class pinHandler : 
+class pin_handler : 
 
     def __init__(self): 
-        GPIO.setup([P1, P2, CAMERA_CAPTURE], GPIO.IN, pull_up_down=GPIO.PUD_DOWN) 
-        GPIO.setup([AOS_SAT], GPIO.OUT, initial=GPIO.HIGH)
-        GPIO.add_event_detect(P1, GPIO.BOTH, self.handle) 
-        GPIO.add_event_detect(P2, GPIO.BOTH, self.handle)         
-        GPIO.add_event_detect(CAMERA_CAPTURE, GPIO.RISING, self.handle) 
-
         #interval queue
         self.qint = deque(maxlen=2)
 
@@ -33,3 +28,15 @@ class pinHandler :
 
     def aos_out(self): 
         GPIO.output(AOS_SAT, GPIO.HIGH) 
+
+if __name__ == "__main__" : 
+    ph = pin_handler()
+    GPIO.setmode(GPIO.BOARD)
+    GPIO.setup([P1, P2, CAMERA_CAPTURE], GPIO.IN, pull_up_down=GPIO.PUD_DOWN) 
+    GPIO.setup([AOS_SAT], GPIO.OUT, initial=GPIO.HIGH)
+    GPIO.add_event_detect(P1, GPIO.BOTH, self.handle) 
+    GPIO.add_event_detect(P2, GPIO.BOTH, self.handle)         
+    GPIO.add_event_detect(CAMERA_CAPTURE, GPIO.RISING, self.handle) 
+
+    while True : 
+        time.sleep(1e6) 

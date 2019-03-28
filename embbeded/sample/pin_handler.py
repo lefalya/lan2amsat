@@ -18,7 +18,8 @@ class pin_handler :
         self.qint = deque(maxlen=2)
 
     
-    def handle(self, pin): 
+    def handle(self, pin):
+        print(pin)
         dt = datetime.utcnow() 
         microsecond = dt.microsecond 
         self.qint.append(microsecond) 

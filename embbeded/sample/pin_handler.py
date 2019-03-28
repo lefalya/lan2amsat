@@ -1,6 +1,6 @@
 import RPi.GPIO as GPIO 
 import time
-import datetime 
+from datetime import datetime 
 from collections import deque 
 
 

@@ -34,9 +34,9 @@ if __name__ == "__main__" :
     GPIO.setmode(GPIO.BOARD)
     GPIO.setup([P1, P2, CAMERA_CAPTURE], GPIO.IN, pull_up_down=GPIO.PUD_DOWN) 
     GPIO.setup([AOS_SAT], GPIO.OUT, initial=GPIO.HIGH)
-    GPIO.add_event_detect(P1, GPIO.BOTH, self.handle) 
-    GPIO.add_event_detect(P2, GPIO.BOTH, self.handle)         
-    GPIO.add_event_detect(CAMERA_CAPTURE, GPIO.RISING, self.handle) 
+    GPIO.add_event_detect(P1, GPIO.BOTH, ph.handle) 
+    GPIO.add_event_detect(P2, GPIO.BOTH, ph.handle)         
+    GPIO.add_event_detect(CAMERA_CAPTURE, GPIO.RISING, ph.handle) 
 
     while True : 
         time.sleep(1e6) 

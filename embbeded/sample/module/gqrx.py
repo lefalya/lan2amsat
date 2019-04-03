@@ -17,13 +17,13 @@ class gqrx :
         self.distance_deque.append(distance) 
         if(len(self.distance_deque) == 2):
             interval = (self.timeutc[1]-self.timeutc[0]).total_seconds()
-            print(self.distance_deque[1], ' - ', self.distance_deque[0], ' = ', self.distance_deque[1]-self.distance_deque[0])
+#            print(self.distance_deque[1], ' - ', self.distance_deque[0], ' = ', self.distance_deque[1]-self.distance_deque[0])
             relative_velocity = (self.distance_deque[1]-self.distance_deque[0])
             delta_f = relative_velocity * self.center_frequency/c 
             corrected_frequency = (self.center_frequency + (-1*delta_f))
 
 #            print("doppler      : ", -1*delta_f," corrected freq        : ", corrected_frequency, end="\r")
-            print(corrected_frequency)
+#            print(corrected_frequency)
             return corrected_frequency 
 
     def correct_doppler(self, distance):

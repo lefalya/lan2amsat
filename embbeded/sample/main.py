@@ -7,14 +7,19 @@ from scipy.constants import c
 from module import direwolf 
 from module import gqrx 
 from module import tle
+
 from task import task_runner
-#from inout import io_handler 
+from inout import io_handler 
+from fifo import fifo 
 
 import schedule
 import threading 
 import select 
 import socket 
 import os 
+
+#import RPi.GPIO as GPIO 
+# import time 
 
 # distance between station and passing satellite 
 dis = 0 
@@ -44,6 +49,8 @@ class main :
                 )
         self.sstv_mode = "Robot36"
         self.calculate_az_el = True
+        self.fifo = fifo() 
+        self.io = io_handler(fifo = self.fifo) 
 
     def set_frequency(self) : 
         radio.correct_doppler(self.distance)
@@ -66,7 +73,7 @@ class main :
         # last elevation
         el_last = ''
         
-#        schedule.every(deltaT).seconds.do(self.set_frequency)
+        schedule.every(1).seconds.do(self.fifo.get_fifo_list)
 
         while True and self.calculate_az_el :  
             schedule.run_pending()
@@ -110,6 +117,7 @@ if __name__ == "__main__":
     run = main()
     rx = direwolf('localhost', 8001)
     radio = gqrx(center_frequency, deltaT)  
+
     while True : 
         print_lock.acquire()
         start_new_thread(run.get_az_el, ())

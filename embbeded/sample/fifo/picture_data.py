@@ -1,6 +1,6 @@
-import fifo_data 
+from fifo import fifo_data
 
-class picture_data(fifo_data) : 
+class picture_data(fifo_data.fifo_data): 
 
     def __init__(self):
         self.path = '' 

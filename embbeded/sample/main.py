@@ -7,7 +7,8 @@ from scipy.constants import c
 from module import direwolf 
 from module import gqrx 
 from module import tle
-from task_runner import task_runner
+from task import task_runner
+#from inout import io_handler 
 
 import schedule
 import threading 
@@ -65,7 +66,7 @@ class main :
         # last elevation
         el_last = ''
         
-        schedule.every(deltaT).seconds.do(self.set_frequency)
+#        schedule.every(deltaT).seconds.do(self.set_frequency)
 
         while True and self.calculate_az_el :  
             schedule.run_pending()
@@ -93,11 +94,15 @@ class main :
                 append_status = True 
 
             if str(el) != el_last :
+                self.set_frequency()
+                
+                '''
                 print("\n")
                 print(satellite)
                 print("elevation    : ", el)
                 print("azimuth      : ", az) 
                 print("slant range  : ", distance.m)
+                '''
                 el_last = str(el)
 
 if __name__ == "__main__": 

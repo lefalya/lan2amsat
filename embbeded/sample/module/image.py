@@ -5,10 +5,9 @@ from resizeimage import resizeimage
 
 class image: 
 
-    def __init__(self, mode, fifo):
+    def __init__(self, mode):
         self.cv2_filename = "opencv_cam.jpg"
         self.mode = mode
-        self.fifo = fifo
 
     def transmit(self, image_path, mode):
         with open(image_path, 'r+b') as f: 

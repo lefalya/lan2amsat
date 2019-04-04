@@ -14,8 +14,14 @@ class fifo:
 
     # construct picture fifo object 
     def construct_picture(self, **kwargs): 
-        pc = picture_data.picture_data() 
+        pc = picture_data() 
         pc.set_path(kwargs["path"]) 
         pc.set_alt(kwargs["alt"]) 
-        self.append(pc) 
+        self.append(pc)
 
+    '''
+    # dummy function 
+    def get_pic(self):
+        if(len(self.fifo) > 0):
+            print("dalam fifo : ", self.fifo[0].path)
+    '''

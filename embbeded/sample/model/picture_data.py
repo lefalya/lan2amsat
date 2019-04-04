@@ -1,6 +1,6 @@
 from model import event
 
-class picture_data(event.event): 
+class picture_data(event): 
 
     def __init__(self):
         self.path = '' 

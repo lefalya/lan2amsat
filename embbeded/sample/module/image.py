@@ -33,7 +33,7 @@ class image:
         camera = cv2.VideoCapture(0) 
         return_val, img = camera.read() 
         cv2.imwrite(path, img) 
-
+        print(path)
         return path, formated_time
 
 if __name__ == "__main__" : 

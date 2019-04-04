@@ -2,6 +2,7 @@ import RPi.GPIO as GPIO
 import time
 from datetime import datetime 
 from collections import deque 
+from module import image 
 
 D_TX = 8
 D_RX = 10 
@@ -27,8 +28,10 @@ class io_handler :
         GPIO.add_event_detect(CAMERA_CAPTURE, GPIO.FALLING, self.handle) 
 
     def handle(self, pin):
-        print("interrupt from : ", pin)
-        if(pin == CAMERA_CAPTURE):  
+        print("interrupt from : ", pin) 
+
+        if(pin == CAMERA_CAPTURE): 
+            path, time = image.capture() 
             self.master_fifo.construct_picture(
                     path = "/picture",
                     alt = "new picture"

@@ -2,6 +2,7 @@ import os
 import cv2
 import PIL.Image
 from resizeimage import resizeimage 
+from datetime import datetime 
 
 class image: 
 
@@ -24,14 +25,21 @@ class image:
             }[mode]
 
     def capture(self):
-        print("capture !")        
+        time = datetime.utcnow()
+        formated_time = time.strftime('%B %d %Y - %H:%M:%S:%f')
+        filename = time.strftime('%B_%d_%Y_%H_%M_%S_%f')
+        filename = filename + '.jpg'
+        path = './capture/'+filename 
         camera = cv2.VideoCapture(0) 
         return_val, img = camera.read() 
-        cv2.imwrite("./capture/"+self.cv2_filename,img) 
-        self.transmit("./capture/"+self.cv2_filename, self.mode) 
+        cv2.imwrite(path, img) 
+
+        return path, formated_time
 
 if __name__ == "__main__" : 
-    image_client = image('Robot36', '')
+    image_client = image('Robot36')
 #    image_client.transmit(sstv_client,'../assets/500x500.jpg', 'Robot36')
-    image_client.capture()    
+    path, time = image_client.capture()    
+    print(path)
+    print(time)
 

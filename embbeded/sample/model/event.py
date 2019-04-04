@@ -1,6 +1,6 @@
 from datetime import datetime 
 
-class fifo_data : 
+class event : 
     def __init__(self):
         self.type = '' 
         self.date = '' 

@@ -1,6 +1,6 @@
-from fifo import fifo_data
+from model import event
 
-class picture_data(fifo_data.fifo_data): 
+class picture_data(event.event): 
 
     def __init__(self):
         self.path = '' 

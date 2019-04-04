@@ -1,5 +1,5 @@
 from collections import deque 
-from fifo import picture_data 
+from model import picture_data 
 
 class fifo: 
     

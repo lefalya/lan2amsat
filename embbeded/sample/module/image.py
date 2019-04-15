@@ -10,14 +10,12 @@ class image:
         self.cv2_filename = "opencv_cam.jpg"
         self.mode = mode
 
-    def transmit(self, image_path, mode):
+    def resize(self, image_path, mode):
         with open(image_path, 'r+b') as f: 
             with PIL.Image.open(f) as image : 
                 cover = resizeimage.resize_cover(image, self.get_size(mode))
-                cover.save("./capture/cap_res.jpg", image.format)
+                cover.save(image_path, image.format)
 
-        os.system("./shell/send_sstv.sh ../capture/cap_res.jpg "+mode)
-   
     def get_size(self,mode): 
         return {
                 'Robot36' : [320,240],
@@ -33,12 +31,11 @@ class image:
         camera = cv2.VideoCapture(0) 
         return_val, img = camera.read() 
         cv2.imwrite(path, img) 
-        print(path)
+        self.resize(path, self.mode)
         return path, formated_time
 
 if __name__ == "__main__" : 
     image_client = image('Robot36')
-#    image_client.transmit(sstv_client,'../assets/500x500.jpg', 'Robot36')
     path, time = image_client.capture()    
     print(path)
     print(time)

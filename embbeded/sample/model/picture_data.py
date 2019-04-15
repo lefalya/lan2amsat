@@ -3,8 +3,9 @@ from model import event
 class picture_data(event): 
 
     def __init__(self):
-        self.path = '' 
-        self.alt = '' 
+        self.path = ''
+        self.alt = ''
+        self.set_type('img')
 
     def set_path(self, path): 
         self.path = path 

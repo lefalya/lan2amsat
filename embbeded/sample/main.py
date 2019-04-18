@@ -43,13 +43,14 @@ class main :
     def __init__(self):
         self.distance = 0 
         self.callsign = "YDE2E"
-        self.task = task_runner(
-                main = self,
-                callsign = self.callsign
-                )
         self.sstv_mode = "Robot36"
         self.calculate_az_el = True
         self.fifo = fifo() 
+        self.task = task_runner(
+                main = self,
+                callsign = self.callsign,
+                fifo = self.fifo
+                )
         self.io = io_handler(fifo = self.fifo) 
 
     def set_frequency(self) : 

@@ -2,10 +2,10 @@ from model import event
 
 class picture_data(event): 
 
-    def __init__(self):
+    def __init__(self, **kwargs):
         self.path = ''
         self.alt = ''
-        self.set_type('img')
+        self.set_type(kwargs['variables'].FIFO_TYPE_IMG())
 
     def set_path(self, path): 
         self.path = path 

@@ -8,10 +8,18 @@ class fifo:
     
     def __init__(self, **kwargs): 
         self.fifo = deque()
+
+        # Injected instance, apply rule [2] 
+        self.master_io = ''         
+
         self.variables = kwargs['variables']
         self.date_time = kwargs['datetime']
         self.encoder = encoder(callsign = kwargs['callsign'],
                                variables = self.variables)
+
+    # Inter-dependent class, apply rule [1] 
+    def set_master_io(self, master_io): 
+        self.master_io = master_io 
 
     def append(self, data): 
         buff_path = self.encoder.generate_buff(data)

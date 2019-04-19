@@ -8,6 +8,7 @@ from module import direwolf
 from module import gqrx 
 from module import tle
 
+from date_time import date_time 
 from task import task_runner
 from inout import io_handler 
 from fifo import fifo 
@@ -16,10 +17,7 @@ import schedule
 import threading 
 import select 
 import socket 
-import os 
-
-#import RPi.GPIO as GPIO 
-# import time 
+import os
 
 # distance between station and passing satellite 
 dis = 0 
@@ -45,13 +43,21 @@ class main :
         self.callsign = "YDE2E"
         self.sstv_mode = "Robot36"
         self.calculate_az_el = True
-        self.fifo = fifo() 
+        
+        # last edit Fri Apr 19, 13:33:03 | Problem : io butuh fifo, fifo butuh io
+        # Status : Done (New Rules, [1] & [2])
+        self.io = io_handler() 
+        self.fifo = fifo(callsign = self.callsign, variables = variables, datetime = date_time)
+
+        # Inter-depedency injection, apply rule [1] 
+        self.io.set_master_fifo(self.fifo) 
+        self.fifo.set_master_io(self.io)
+
         self.task = task_runner(
                 main = self,
                 callsign = self.callsign,
                 fifo = self.fifo
                 )
-        self.io = io_handler(fifo = self.fifo) 
 
     def set_frequency(self) : 
         radio.correct_doppler(self.distance)

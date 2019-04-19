@@ -21,7 +21,7 @@ class fifo:
     def append_left(self,data): 
         buff_path = self.encoder.generate_buff(data) 
         data.set_buff_path(buff_path) 
-        self.fifo.appendleft(data) 
+        self.fifo.appendleft(data)
 
     def pop(self):
         try :
@@ -29,12 +29,17 @@ class fifo:
             bfpth = data.get_buff_path()
             self.encoder.play_buff(bfpth)
 
-            if(data.get_type() == self.variables.FIFO_TYPE_IMG()) :
+            if(data.get_type() == self.variables.FIFO_TYPE_IMG()):
                 os.system('rm '+data.get_path())
 
             os.system('rm '+bfpth) 
         except IndexError : 
             print('Index Error')
+    
+    def pop_all(self):
+        dequelen = len(self.fifo)
+        for i in range(dequelen):
+            self.pop()
 
     def get_fifo(self): 
         return self.fifo

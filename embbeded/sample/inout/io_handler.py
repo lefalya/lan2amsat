@@ -15,11 +15,12 @@ CAMERA_CAPTURE = 12
 
 class io_handler : 
 
-    def __init__(self): 
+    def __init__(self, **kwargs): 
 
         # Injected instance, apply rule [2]
         self.master_fifo = ''
-        self.camera_handler = camera_handler.camera_handler(self.master_fifo)
+        
+        self.datetime = kwargs['datetime']
 
         GPIO.setmode(GPIO.BOARD)
         GPIO.setup([P1, P2, CAMERA_CAPTURE], GPIO.IN, pull_up_down=GPIO.PUD_UP) 
@@ -31,6 +32,14 @@ class io_handler :
     # Inter-dependent class, apply rule [1]
     def set_master_fifo(self, master_fifo): 
         self.master_fifo = master_fifo
+    
+    # Rule [1] dependent instance, apply rule [3] 
+    def set_camera_handler(self, **kwargs):
+        self.camera_handler = camera_handler.camera_handler(
+                    mode = kwargs['mode'],
+                    datetime = self.datetime,
+                    fifo = self.master_fifo
+                )
 
     def handle(self, pin):
         if(pin == CAMERA_CAPTURE): 

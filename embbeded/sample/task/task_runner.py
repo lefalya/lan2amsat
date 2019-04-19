@@ -7,8 +7,11 @@ class task_runner :
     def __init__(self, **kwargs) : 
         self.callsign = kwargs["callsign"]
         self.main = kwargs["main"]
+        self.master_fifo = kwargs['fifo']
         self.tle = tle()
-        self.image = image(sstv_mode)
+        self.image = image(
+                mode = kwargs['mode'],
+                datetime = kwargs['datetime'])
 
     def parse_command(self, callsign, message) :
         if callsign == self.callsign :

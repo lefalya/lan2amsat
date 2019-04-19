@@ -18,6 +18,7 @@ import threading
 import select 
 import socket 
 import os
+import variables
 
 # distance between station and passing satellite 
 dis = 0 
@@ -46,17 +47,24 @@ class main :
         
         # last edit Fri Apr 19, 13:33:03 | Problem : io butuh fifo, fifo butuh io
         # Status : Done (New Rules, [1] & [2])
-        self.io = io_handler() 
-        self.fifo = fifo(callsign = self.callsign, variables = variables, datetime = date_time)
+        self.io = io_handler(datetime = date_time) 
+        self.fifo = fifo(
+                callsign = self.callsign, 
+                variables = variables, 
+                datetime = date_time)
 
-        # Inter-depedency injection, apply rule [1] 
-        self.io.set_master_fifo(self.fifo) 
-        self.fifo.set_master_io(self.io)
+        self.fifo.set_master_io(self.io) # Rule [1] 
+        self.io.set_master_fifo(self.fifo) # Rule [1] 
+        self.io.set_camera_handler(
+                mode = self.sstv_mode,
+                datetime = date_time) # Rule [2]
 
         self.task = task_runner(
                 main = self,
                 callsign = self.callsign,
-                fifo = self.fifo
+                fifo = self.fifo, 
+                mode = self.sstv_mode,
+                datetime = date_time
                 )
 
     def set_frequency(self) : 
@@ -80,8 +88,6 @@ class main :
         # last elevation
         el_last = ''
         
-        schedule.every(1).seconds.do(self.fifo.get_fifo_list)
-
         while True and self.calculate_az_el :  
             schedule.run_pending()
 
@@ -125,7 +131,8 @@ if __name__ == "__main__":
     rx = direwolf('localhost', 8001)
     radio = gqrx(center_frequency, deltaT)  
 
-    while True : 
+    while True :
+        print('RUNNING')
         print_lock.acquire()
         start_new_thread(run.get_az_el, ())
         start_new_thread(run.recv_data, ())

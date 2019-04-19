@@ -2,10 +2,15 @@ from datetime import datetime
 from module import image
 
 class camera_handler : 
-    def __init__(self, fifo): 
+    def __init__(self, **kwargs): 
         self.thold_start = datetime.utcnow()
-        self.image = image('Robot36')
-        self.master_fifo = fifo 
+        self.image = image(
+                mode = kwargs['mode'], 
+                datetime = kwargs['datetime'])
+
+        # apply rule [2] 
+        # non inter-dependent instances, ignoring rule [1] 
+        self.master_fifo = kwargs['fifo'] 
 
     def trigger(self): 
         dt = datetime.utcnow() 
@@ -15,7 +20,8 @@ class camera_handler :
             
             path, time = self.image.capture()
             self.master_fifo.construct_picture(
-                    path = path, 
-                    alt = time
+                    path = path,
+                    datetime = time,
+                    alt = time # Soon via UART
                 )
 

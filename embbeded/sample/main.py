@@ -45,18 +45,32 @@ class main :
         self.sstv_mode = "Robot36"
         self.calculate_az_el = True
         
-        # last edit Fri Apr 19, 13:33:03 | Problem : io butuh fifo, fifo butuh io
-        # Status : Done (New Rules, [1] & [2])
+        ''' 
+        datetime -> io_handler -> camera_handler'   
+        '''
         self.io = io_handler(datetime = date_time) 
+        
+        ''' 
+        callsign -> fifo -> encoder'  
+        variables -> fifo' -> encoder'
+        datetime -> fifo' 
+        '''
         self.fifo = fifo(
                 callsign = self.callsign, 
                 variables = variables, 
                 datetime = date_time)
 
         self.fifo.set_master_io(self.io) # Rule [1] 
-        self.io.set_master_fifo(self.fifo) # Rule [1] 
+        self.io.set_master_fifo(self.fifo) # Rule [1]
+
+        ''' 
+        mode -> camera_handler -> image' 
+        '''
         self.io.set_camera_handler(mode = self.sstv_mode) # Rule [2]
 
+        '''
+        main -> task_runner' 
+        '''
         self.task = task_runner(
                 main = self,
                 callsign = self.callsign,

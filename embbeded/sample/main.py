@@ -55,9 +55,7 @@ class main :
 
         self.fifo.set_master_io(self.io) # Rule [1] 
         self.io.set_master_fifo(self.fifo) # Rule [1] 
-        self.io.set_camera_handler(
-                mode = self.sstv_mode,
-                datetime = date_time) # Rule [2]
+        self.io.set_camera_handler(mode = self.sstv_mode) # Rule [2]
 
         self.task = task_runner(
                 main = self,

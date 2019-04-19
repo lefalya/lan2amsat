@@ -2,13 +2,13 @@ import os
 import cv2
 import PIL.Image
 from resizeimage import resizeimage 
-from datetime import datetime 
 
 class image: 
 
-    def __init__(self, mode):
+    def __init__(self, **kwargs):
         self.cv2_filename = "opencv_cam.jpg"
-        self.mode = mode
+        self.mode = kwargs['mode']
+        self.date_time = kwargs['datetime']
 
     def resize(self, image_path, mode):
         with open(image_path, 'r+b') as f: 
@@ -23,9 +23,8 @@ class image:
             }[mode]
 
     def capture(self):
-        time = datetime.utcnow()
-        formated_time = time.strftime('%B %d %Y - %H:%M:%S:%f')
-        filename = time.strftime('%B_%d_%Y_%H_%M_%S_%f')
+        formated_time = self.date_time.get_time_utc_str()
+        filename = self.date_time.get_time_utc_filename()
         filename = filename + '.jpg'
         path = './capture/'+filename 
         camera = cv2.VideoCapture(0) 

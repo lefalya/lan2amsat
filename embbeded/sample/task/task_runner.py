@@ -27,28 +27,25 @@ class task_runner :
 
         # live image capture 
         if command == "CAPTURE" :
-            print('IN CAPTURE')
-            '''
             path, datetime = self.image.capture()
             self.master_fifo.construct_picture(
                     path=path, 
-                    datetime=datetime) 
+                    datetime=datetime,
+                    alt=datetime) 
+
+            # pop immediately 
             self.master_fifo.pop()
-            '''
+            self.master_fifo.pop()
 
         # get fifo content 
         elif command == "GETFIFOCONTENT": 
             print('IN GETFIFOCONTENT') 
-            '''
             self.master_fifo.get_fifo_list() 
-            '''
 
         # pop all fifo's element
         elif command == "POPALLFIFO":
             print('IN POPALLFIFO')
-            '''
             self.master_fifo.pop_all()
-            '''
 
         # dummy command
         elif command == "LOOPBACK": 

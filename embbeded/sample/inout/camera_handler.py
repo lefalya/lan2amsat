@@ -18,6 +18,7 @@ class camera_handler :
         if (interval > 5):
             self.thold_start = dt 
             
+            print('IO : INTERRUPT CAMERA PIN 12')
             path, time = self.image.capture()
             self.master_fifo.construct_picture(
                     path = path,

@@ -7,7 +7,7 @@ class task_runner :
     def __init__(self, **kwargs) : 
         self.callsign = kwargs["callsign"]
         self.main = kwargs["main"]
-        self.master_fifo = kwargs['fifo']
+        self.master_fifo = kwargs['fifo'] # rule [2] 
         self.tle = tle()
         self.image = image(
                 mode = kwargs['mode'],
@@ -16,7 +16,7 @@ class task_runner :
     def parse_command(self, callsign, message) :
         if callsign == self.callsign :
             self.execute(message)
-            
+
     def execute(self, command):
         if "#" not in command :
             self.single_command(command)
@@ -24,8 +24,33 @@ class task_runner :
             self.command_with_message(command)
 
     def single_command(self, command):
+
+        # live image capture 
         if command == "CAPTURE" :
-            self.image.capture()
+            print('IN CAPTURE')
+            '''
+            path, datetime = self.image.capture()
+            self.master_fifo.construct_picture(
+                    path=path, 
+                    datetime=datetime) 
+            self.master_fifo.pop()
+            '''
+
+        # get fifo content 
+        elif command == "GETFIFOCONTENT": 
+            print('IN GETFIFOCONTENT') 
+            '''
+            self.master_fifo.get_fifo_list() 
+            '''
+
+        # pop all fifo's element
+        elif command == "POPALLFIFO":
+            print('IN POPALLFIFO')
+            '''
+            self.master_fifo.pop_all()
+            '''
+
+        # dummy command
         elif command == "LOOPBACK": 
             print("LOOPBCK")
 

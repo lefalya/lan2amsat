@@ -46,7 +46,7 @@ class main :
         self.calculate_az_el = True
         
         ''' 
-        datetime -> io_handler -> camera_handler'   
+        datetime -> io_handler -> camera_handler -> image'
         '''
         self.io = io_handler(datetime = date_time) 
         

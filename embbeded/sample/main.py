@@ -1,6 +1,5 @@
 from datetime import datetime 
 from skyfield.api import Topos, load 
-from _thread import * 
 from collections import deque 
 from scipy.constants import c
 
@@ -13,7 +12,7 @@ from task import task_runner
 from inout import io_handler 
 from fifo import fifo 
 
-import schedule
+#import schedule
 import threading 
 import select 
 import socket 
@@ -82,8 +81,11 @@ class main :
     def set_frequency(self) : 
         radio.correct_doppler(self.distance)
 
+    def get_fifo(self):
+        return self.fifo.encode_thread()
+
     def recv_data(self):
-        while True : 
+        while True :
             receive = rx.receive()
             if receive.closed == True : 
                 print_lock.release()
@@ -101,7 +103,7 @@ class main :
         el_last = ''
         
         while True and self.calculate_az_el :  
-            schedule.run_pending()
+       #     schedule.run_pending()
 
             # satellite's  obital element 
             tl = tle()
@@ -128,13 +130,16 @@ class main :
             if str(el) != el_last :
                 self.set_frequency()
                 
-                '''
+                '''                
                 print("\n")
                 print(satellite)
                 print("elevation    : ", el)
                 print("azimuth      : ", az) 
                 print("slant range  : ", distance.m)
                 '''
+
+                print('FIFO Contents : ', self.fifo.fifo) 
+                print('ENCODE_BUFF Contents : ', self.fifo.encode_buff)                 
                 el_last = str(el)
 
 if __name__ == "__main__": 
@@ -143,11 +148,14 @@ if __name__ == "__main__":
     rx = direwolf('localhost', 8001)
     radio = gqrx(center_frequency, deltaT)  
 
-    while True :
-        print('RUNNING')
-        print_lock.acquire()
-        start_new_thread(run.get_az_el, ())
-        start_new_thread(run.recv_data, ())
+    print('RUNNING')
+    print_lock.acquire()
+    p1 = threading.Thread(target=run.get_az_el, args=()) 
+    p2 = threading.Thread(target=run.recv_data, args=())
+    p3 = threading.Thread(target=run.fifo.encode_thread, args=())
+    p1.start()
+    p2.start()
+    p3.start()
 
     
     

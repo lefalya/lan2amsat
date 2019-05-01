@@ -3,7 +3,7 @@
 # For testing purpose
 from model import picture_data
 import os 
-
+from datetime import datetime
 class encoder : 
 
     def __init__(self, **kwargs): 
@@ -19,11 +19,10 @@ class encoder :
 
     def encode_sstv(self, picture):
         img_path = picture.get_path()
-        img_date = picture.get_date() 
+        img_date = picture.get_date()
         wav_path = "./buff/sstv_wav_"+img_date.replace(' ','_')+'.wav'
         com = 'python -m pysstv '+img_path+' '+wav_path+' --mode Robot36'
         os.system(com)
- 
         return wav_path
 
     def generate_buff(self, data):

@@ -2,9 +2,13 @@ from datetime import datetime
 
 class event : 
     def __init__(self):
+        self.live = False
         self.type = '' 
-        self.date = '' 
+        self.date = ''
         self.buff_path = '' 
+
+    def set_live(self, value):
+        self.live = value
 
     def set_type(self, type_name): 
         self.type = type_name
@@ -14,6 +18,9 @@ class event :
 
     def set_date(self, date_time): 
         self.date = date_time 
+
+    def get_live(self):
+        return self.live
 
     def get_type(self):
         return self.type 

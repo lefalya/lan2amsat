@@ -25,31 +25,33 @@ class task_runner :
 
     def single_command(self, command):
 
+        if command == "LOOPBACK":
+            live_response = '200;'+self.callsign
+            self.master_fifo.construct_message(
+                    message=live_response,
+                    live=True)
+            
         # live image capture 
         if command == "CAPTURE" :
+            live_response = '201;'+self.callsign
+            self.master_fifo.construct_message(
+                    message=live_response,
+                    live=True)
+
             path, datetime = self.image.capture()
             self.master_fifo.construct_picture(
                     path=path, 
                     datetime=datetime,
-                    alt=datetime) 
-
-            # pop immediately 
-            self.master_fifo.pop()
-            self.master_fifo.pop()
+                    alt=datetime,
+                    live=True) 
 
         # get fifo content 
         elif command == "GETFIFOCONTENT": 
-            print('IN GETFIFOCONTENT') 
             self.master_fifo.get_fifo_list() 
 
         # pop all fifo's element
         elif command == "POPALLFIFO":
-            print('IN POPALLFIFO')
             self.master_fifo.pop_all()
-
-        # dummy command
-        elif command == "LOOPBACK": 
-            print("LOOPBCK")
 
     def command_with_message(self, buff):
         buff = buff.split('#') 

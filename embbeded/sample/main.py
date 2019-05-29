@@ -40,7 +40,7 @@ class main :
     
     def __init__(self):
         self.distance = 0 
-        self.callsign = "YDE2E"
+        self.callsign = "GSRASP"
         self.sstv_mode = "Robot36"
         self.calculate_az_el = True
         

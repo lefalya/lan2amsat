@@ -3,6 +3,7 @@ from model import picture_data
 from model import text_data 
 from module import encoder
 import os 
+import time
 
 class fifo: 
     
@@ -51,7 +52,10 @@ class fifo:
                 if (data.get_live() == True):
                     print('live command')
                     self.fifo.appendleft(data)
+                    self.master_io.ptt_high()
+                    time.sleep(0.5)
                     self.pop()
+                    self.master_io.ptt_low()
                 else:
                     self.fifo.append(data)
 
@@ -59,6 +63,8 @@ class fifo:
         try :
             data = self.fifo.popleft() 
             bfpth = data.get_buff_path()
+
+            # transmit buffer
             self.encoder.play_buff(bfpth)
 
             if(data.get_type() == self.variables.FIFO_TYPE_IMG()):
@@ -70,8 +76,11 @@ class fifo:
     
     def pop_all(self):
         dequelen = len(self.fifo)
+        self.master_io.ptt_high()
+        time.sleep(0.5)
         for i in range(dequelen):
             self.pop()
+        self.master_io.ptt_low()
 
     def get_fifo(self): 
         return self.fifo

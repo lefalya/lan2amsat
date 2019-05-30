@@ -26,14 +26,14 @@ class task_runner :
     def single_command(self, command):
 
         if command == "LOOPBACK":
-            live_response = '200;'+self.callsign
+            live_response = '200'
             self.master_fifo.construct_message(
                     message=live_response,
                     live=True)
             
         # live image capture 
         if command == "CAPTURE" :
-            live_response = '201;'+self.callsign
+            live_response = '201'
             self.master_fifo.construct_message(
                     message=live_response,
                     live=True)

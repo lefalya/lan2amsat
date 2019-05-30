@@ -1,7 +1,6 @@
 import socket 
 import collections
 from collections import deque
-from scipy.constants import c 
 
 class direwolf: 
 

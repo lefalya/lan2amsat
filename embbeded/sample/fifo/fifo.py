@@ -11,6 +11,7 @@ class fifo:
 
         # FIFO 
         self.fifo = deque()
+        self.callsign = kwargs['callsign'] 
 
         # Encode Buffer 
         self.encode_buff = deque()
@@ -71,7 +72,11 @@ class fifo:
                 os.system('rm '+data.get_path())
 
             os.system('rm '+bfpth) 
-        except IndexError : 
+        except IndexError :
+            message = '400'
+            self.construct_message(
+                    message=message,
+                    live=True)
             print('Index Error')
     
     def pop_all(self):
@@ -123,8 +128,9 @@ class fifo:
     def construct_message(self, **kwargs): 
         txt = text_data(variables = self.variables)
         txt.set_date(self.date_time.get_time_utc_str()) 
-        txt.set_text(message=kwargs['message'])
-        print('kwargs live ', kwargs['live'])
+        txt.set_text(message=kwargs['message']
+                +";"
+                +self.callsign)
 
         if 'live' in kwargs:
             txt.set_live(True)

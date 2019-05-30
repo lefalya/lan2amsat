@@ -7,7 +7,8 @@ class task_runner :
     def __init__(self, **kwargs) : 
         self.callsign = kwargs["callsign"]
         self.main = kwargs["main"]
-        self.master_fifo = kwargs['fifo'] # rule [2] 
+        self.master_fifo = kwargs['fifo'] # rule [2]
+        self.master_io = kwargs['io']
         self.tle = tle()
         self.image = image(
                 mode = kwargs['mode'],
@@ -62,4 +63,6 @@ class task_runner :
             self.main.calculate_az_el = False 
             self.tle.set_tle(message)
             self.main.calculate_az_el = True 
-            
+
+        if com == 'PAS':
+           self.io.write_serial(message) 

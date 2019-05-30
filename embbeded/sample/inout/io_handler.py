@@ -2,9 +2,11 @@ from datetime import datetime
 from collections import deque 
 from module import image 
 from inout import camera_handler 
+from inout import Serial_handler
 
 import RPi.GPIO as GPIO 
 import time
+import serial 
 
 class io_handler : 
 
@@ -12,6 +14,11 @@ class io_handler :
 
         # Injected instance, apply rule [2]
         self.master_fifo = ''
+        self.sh = ''
+
+        self.ser = serial.Serial('/dev/ttyACM0',
+                9600,
+                timeout=0) 
 
         self.D_TX = 8
         self.D_RX = 10 
@@ -35,12 +42,25 @@ class io_handler :
         self.master_fifo = master_fifo
     
     # Rule [1] dependent instance, apply rule [3] 
+    def set_serial_handler(self, address): 
+        self.sh = Serial_handler(
+                master_fifo = self.master_fifo,
+                master_io=self)
+        
+    # Rule [1] dependent instance, apply rule [3] 
     def set_camera_handler(self, **kwargs):
         self.camera_handler = camera_handler.camera_handler(
                     mode = kwargs['mode'],
                     datetime = self.datetime,
                     fifo = self.master_fifo
                 )
+
+    def read_serial(self):
+        data = self.ser.read(300) 
+        self.sh.parse(data) 
+
+    def write_serial(self, data) 
+        self.ser.write(bytes(data, 'utf-8')) 
 
     def handle(self, pin):
         if(pin == self.CAMERA_CAPTURE): 

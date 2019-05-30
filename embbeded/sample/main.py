@@ -67,14 +67,15 @@ class main :
         mode -> camera_handler -> image' 
         '''
         self.io.set_camera_handler(mode = self.sstv_mode) # Rule [2]
-
+        self.io.set_serial_handler() # Rule [2] 
         '''
         main -> task_runner' 
         '''
         self.task = task_runner(
                 main = self,
                 callsign = self.callsign,
-                fifo = self.fifo, 
+                fifo = self.fifo,
+                io = self.io
                 mode = self.sstv_mode,
                 datetime = date_time
                 )

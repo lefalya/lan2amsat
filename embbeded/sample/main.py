@@ -6,6 +6,7 @@ from scipy.constants import c
 from module import direwolf 
 from module import gqrx 
 from module import tle
+from module import Tracker 
 
 from date_time import date_time 
 from task import task_runner
@@ -78,6 +79,10 @@ class main :
                 datetime = date_time
                 )
 
+        self.tracker = Tracker(
+                latitude = '6.2405 S',
+                longitude = '106.9501 E')
+
     def set_frequency(self) : 
         radio.correct_doppler(self.distance)
 
@@ -93,7 +98,7 @@ class main :
 
             self.task.parse_command(receive.callsign, receive.message)
 
-    def get_az_el(self): 
+    def main_thread(self): 
 
         global dis, deltaT
         
@@ -101,46 +106,25 @@ class main :
 
         # last elevation
         el_last = ''
-        
-        while True and self.calculate_az_el :  
-       #     schedule.run_pending()
+        while True :          
+            ''' apply serial read here '''
+            self.fifo.encode_thread()    
+            if self.calculate_az_el :  
+                el,az,dis = self.tracker.track()
+                self.tracker.print_azeldis() 
 
-            # satellite's  obital element 
-            tl = tle()
-            satellite = tl.satellite
+                self.distance = dis 
 
-            ts = load.timescale() 
-            t = ts.utc(datetime.utcnow().year, 
-                       datetime.utcnow().month, 
-                       datetime.utcnow().day, 
-                       datetime.utcnow().hour, 
-                       datetime.utcnow().minute, 
-                       datetime.utcnow().second) 
-            my_location = Topos('6.2405 S', '106.9501 E') 
-            difference = satellite - my_location
-            topocentric = difference.at(t) 
-            el,az,distance = topocentric.altaz()
-            self.distance = distance.m
+                #append first distance 
+                if(not append_status):
+                    self.set_frequency()
+                    append_status = True 
 
-            #append first distance 
-            if(not append_status):
-                self.set_frequency()
-                append_status = True 
-
-            if str(el) != el_last :
-                self.set_frequency()
-                
-                '''                
-                print("\n")
-                print(satellite)
-                print("elevation    : ", el)
-                print("azimuth      : ", az) 
-                print("slant range  : ", distance.m)
-                '''
-
-                print('FIFO Contents : ', self.fifo.fifo) 
-                print('ENCODE_BUFF Contents : ', self.fifo.encode_buff)                 
-                el_last = str(el)
+                if str(el) != el_last :
+                    self.set_frequency()
+               #     print('FIFO Contents : ', self.fifo.fifo) 
+               #     print('ENCODE_BUFF Contents : ', self.fifo.encode_buff)                 
+                    el_last = str(el)
 
 if __name__ == "__main__": 
 
@@ -150,12 +134,12 @@ if __name__ == "__main__":
 
     print('RUNNING')
     print_lock.acquire()
-    p1 = threading.Thread(target=run.get_az_el, args=()) 
+    p1 = threading.Thread(target=run.main_thread, args=()) 
     p2 = threading.Thread(target=run.recv_data, args=())
-    p3 = threading.Thread(target=run.fifo.encode_thread, args=())
+#    p3 = threading.Thread(target=run.fifo.encode_thread, args=())
     p1.start()
     p2.start()
-    p3.start()
+#    p3.start()
 
     
     

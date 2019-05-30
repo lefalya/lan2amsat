@@ -44,21 +44,20 @@ class fifo:
     ''' 
 
     def encode_thread(self):
-        while True :
-            if len(self.encode_buff) > 0:
-                data = self.encode_buff.popleft() 
-                wav_buff_path = self.encoder.generate_buff(data) 
-                data.set_buff_path(wav_buff_path) 
+        if len(self.encode_buff) > 0:
+            data = self.encode_buff.popleft() 
+            wav_buff_path = self.encoder.generate_buff(data) 
+            data.set_buff_path(wav_buff_path) 
 
-                if (data.get_live() == True):
-                    print('live command')
-                    self.fifo.appendleft(data)
-                    self.master_io.ptt_high()
-                    time.sleep(0.5)
-                    self.pop()
-                    self.master_io.ptt_low()
-                else:
-                    self.fifo.append(data)
+            if (data.get_live() == True):
+                print('live command')
+                self.fifo.appendleft(data)
+                self.master_io.ptt_high()
+                time.sleep(0.5)
+                self.pop()
+                self.master_io.ptt_low()
+            else:
+                self.fifo.append(data)
 
     def pop(self):
         try :

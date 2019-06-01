@@ -1,5 +1,5 @@
 
-class Serial_handler :
+class serial_handler :
     def __init__(self, **kwargs):
         self.master_io = kwargs['master_io']
         self.master_fifo = kwargs['master_fifo']

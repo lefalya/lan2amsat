@@ -75,7 +75,7 @@ class main :
                 main = self,
                 callsign = self.callsign,
                 fifo = self.fifo,
-                io = self.io
+                io = self.io,
                 mode = self.sstv_mode,
                 datetime = date_time
                 )
@@ -109,10 +109,10 @@ class main :
         el_last = ''
         while True :          
             ''' apply serial read here '''
+            self.io.read_serial()
             self.fifo.encode_thread()    
             if self.calculate_az_el :  
                 el,az,dis = self.tracker.track()
-                self.tracker.print_azeldis() 
 
                 self.distance = dis 
 
@@ -122,9 +122,10 @@ class main :
                     append_status = True 
 
                 if str(el) != el_last :
+                    self.tracker.print_azeldis() 
                     self.set_frequency()
-               #     print('FIFO Contents : ', self.fifo.fifo) 
-               #     print('ENCODE_BUFF Contents : ', self.fifo.encode_buff)                 
+                    print('FIFO Contents : ', self.fifo.fifo) 
+                    print('ENCODE_BUFF Contents : ', self.fifo.encode_buff)                 
                     el_last = str(el)
 
 if __name__ == "__main__": 

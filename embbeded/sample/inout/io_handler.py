@@ -2,7 +2,7 @@ from datetime import datetime
 from collections import deque 
 from module import image 
 from inout import camera_handler 
-from inout import Serial_handler
+from inout import serial_handler
 
 import RPi.GPIO as GPIO 
 import time
@@ -42,9 +42,9 @@ class io_handler :
         self.master_fifo = master_fifo
     
     # Rule [1] dependent instance, apply rule [3] 
-    def set_serial_handler(self, address): 
-        self.sh = Serial_handler(
-                master_fifo = self.master_fifo,
+    def set_serial_handler(self): 
+        self.sh = serial_handler.serial_handler(
+                master_fifo = self.master_fifo, 
                 master_io=self)
         
     # Rule [1] dependent instance, apply rule [3] 
@@ -59,12 +59,13 @@ class io_handler :
         data = self.ser.read(300) 
         self.sh.parse(data) 
 
-    def write_serial(self, data) 
+    def write_serial(self, data): 
         self.ser.write(bytes(data, 'utf-8')) 
 
     def handle(self, pin):
         if(pin == self.CAMERA_CAPTURE): 
-            self.camera_handler.trigger()             
+            print('PIN ACTIVATED')
+#            self.camera_handler.trigger()             
     
     def ptt_high(self):
         GPIO.output(self.PTT, GPIO.HIGH)

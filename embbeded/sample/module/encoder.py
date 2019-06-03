@@ -4,11 +4,12 @@
 from model import picture_data
 import os 
 from datetime import datetime
+from model import variables
+
 class encoder : 
 
     def __init__(self, **kwargs): 
         self.callsign = kwargs['callsign']
-        self.variables = kwargs['variables']
 
     def encode_aprs(self, text):
         file_name = "./buff/aprs_wav_"+text.get_date().replace(' ','_')+'.wav'
@@ -27,9 +28,9 @@ class encoder :
 
     def generate_buff(self, data):
         bf_path = ''
-        if (data.get_type() == self.variables.FIFO_TYPE_IMG()):
+        if (data.get_type() == variables.FIFO_TYPE_IMG()):
             bf_path = self.encode_sstv(data) 
-        elif (data.get_type() == self.variables.FIFO_TYPE_TXT()): 
+        elif (data.get_type() == variables.FIFO_TYPE_TXT()): 
             bf_path = self.encode_aprs(data)
         else :
             print('type not defined')

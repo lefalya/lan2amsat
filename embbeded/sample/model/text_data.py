@@ -1,10 +1,11 @@
 from model import event 
+import variables
 
 class text_data(event): 
 
     def __init__(self, **kwargs): 
         self.text = '' 
-        self.set_type(kwargs['variables'].FIFO_TYPE_TXT())
+        self.set_type(variables.FIFO_TYPE_TXT())
 
     def set_text(self, **kwargs): 
         text = '' 

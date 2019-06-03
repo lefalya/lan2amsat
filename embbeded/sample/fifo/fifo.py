@@ -1,6 +1,7 @@
 from collections import deque 
 from model import picture_data
 from model import text_data 
+from model import variables
 from module import encoder
 from module import date_time
 import os 
@@ -20,9 +21,7 @@ class fifo:
         # Injected instance, apply rule [2] 
         self.master_io = ''         
 
-        self.variables = kwargs['variables']
-        self.encoder = encoder(callsign = kwargs['callsign'],
-                               variables = self.variables)
+        self.encoder = encoder(callsign = kwargs['callsign'])
 
     # Inter-dependent class, apply rule [1] 
     def set_master_io(self, master_io): 
@@ -52,7 +51,7 @@ class fifo:
             # transmit buffer
             self.encoder.play_buff(bfpth)
 
-            if(data.get_type() == self.variables.FIFO_TYPE_IMG()):
+            if(data.get_type() == variables.FIFO_TYPE_IMG()):
                 os.system('rm '+data.get_path())
 
             os.system('rm '+bfpth) 
@@ -78,13 +77,13 @@ class fifo:
         txt_count = 0 
         img_count = 0
         for i in self.fifo:
-            if(i.get_type() == self.variables.FIFO_TYPE_TXT()):
+            if(i.get_type() == variables.FIFO_TYPE_TXT()):
                 txt_count = txt_count + 1
             else:
                 img_count = img_count + 1
 
         msg = 'TXT;'+str(txt_count)+';IMG;'+str(img_count)
-        txdt = text_data(variables = self.variables)
+        txdt = text_data()
         txdt.set_date(date_time.get_time_utc_str())
         txdt.set_text(message=msg)
         txdt.set_live(True)
@@ -92,10 +91,10 @@ class fifo:
         self.encode_buff.append(txdt)
 
     def construct_picture(self, **kwargs): 
-        pc = picture_data(variables = self.variables) 
+        pc = picture_data() 
         pc.set_date(kwargs['datetime'])
         pc.set_path(kwargs['path'])
-        txt = text_data(variables = self.variables)
+        txt = text_data()
         txt.set_date(kwargs['datetime'])
         txt.set_text(image_date = kwargs['datetime'], alt=kwargs['alt'])
 
@@ -110,7 +109,7 @@ class fifo:
         self.encode_buff.append(txt)
 
     def construct_message(self, **kwargs): 
-        txt = text_data(variables = self.variables)
+        txt = text_data()
         txt.set_date(date_time.get_time_utc_str()) 
         txt.set_text(message=kwargs['message']
                 +";"

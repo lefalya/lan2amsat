@@ -17,7 +17,6 @@ import threading
 import select 
 import socket 
 import os
-import variables
 
 # distance between station and passing satellite 
 dis = 0 
@@ -46,10 +45,7 @@ class main :
         variables -> fifo' -> encoder'
         datetime -> fifo' 
         '''
-        self.fifo = fifo(
-                callsign = self.callsign, 
-                variables = variables)
-
+        self.fifo = fifo(callsign = self.callsign)
         self.fifo.set_master_io(self.io) # Rule [1] 
         self.io.set_master_fifo(self.fifo) # Rule [1]
 

@@ -2,6 +2,7 @@ from collections import deque
 from model import picture_data
 from model import text_data 
 from module import encoder
+from module import date_time
 import os 
 import time
 
@@ -20,28 +21,12 @@ class fifo:
         self.master_io = ''         
 
         self.variables = kwargs['variables']
-        self.date_time = kwargs['datetime']
         self.encoder = encoder(callsign = kwargs['callsign'],
                                variables = self.variables)
 
     # Inter-dependent class, apply rule [1] 
     def set_master_io(self, master_io): 
         self.master_io = master_io 
-
-    '''
-    def append(self, data): 
-        print('text data encode : ',self.date_time.get_time_str())
-        buff_path = self.encoder.generate_buff(data)
-        print('text data done : ', self.date_time.get_time_str())
-        data.set_buff_path(buff_path)
-        self.fifo.append(data)
-        
-
-    def append_left(self,data): 
-        buff_path = self.encoder.generate_buff(data) 
-        data.set_buff_path(buff_path) 
-        self.fifo.appendleft(data)
-    ''' 
 
     def encode_thread(self):
         if len(self.encode_buff) > 0:
@@ -100,7 +85,7 @@ class fifo:
 
         msg = 'TXT;'+str(txt_count)+';IMG;'+str(img_count)
         txdt = text_data(variables = self.variables)
-        txdt.set_date(self.date_time.get_time_utc_str())
+        txdt.set_date(date_time.get_time_utc_str())
         txdt.set_text(message=msg)
         txdt.set_live(True)
 
@@ -126,7 +111,7 @@ class fifo:
 
     def construct_message(self, **kwargs): 
         txt = text_data(variables = self.variables)
-        txt.set_date(self.date_time.get_time_utc_str()) 
+        txt.set_date(date_time.get_time_utc_str()) 
         txt.set_text(message=kwargs['message']
                 +";"
                 +self.callsign)

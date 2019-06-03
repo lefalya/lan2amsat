@@ -10,9 +10,7 @@ class task_runner :
         self.master_fifo = kwargs['fifo'] # rule [2]
         self.master_io = kwargs['io']
         self.tle = tle()
-        self.image = image(
-                mode = kwargs['mode'],
-                datetime = kwargs['datetime'])
+        self.image = image(mode = kwargs['mode'])
 
     def parse_command(self, callsign, message) :
         if callsign == self.callsign :

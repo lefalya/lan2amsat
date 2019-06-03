@@ -4,9 +4,7 @@ from module import image
 class camera_handler : 
     def __init__(self, **kwargs): 
         self.thold_start = datetime.utcnow()
-        self.image = image(
-                mode = kwargs['mode'], 
-                datetime = kwargs['datetime'])
+        self.image = image(mode = kwargs['mode'])
 
         # apply rule [2] 
         # non inter-dependent instances, ignoring rule [1] 

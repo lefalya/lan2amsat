@@ -1,4 +1,3 @@
-from datetime import datetime 
 from skyfield.api import Topos, load 
 from collections import deque 
 from scipy.constants import c
@@ -7,8 +6,8 @@ from module import direwolf
 from module import gqrx 
 from module import tle
 from module import Tracker 
+from module import date_time 
 
-from date_time import date_time 
 from task import task_runner
 from inout import io_handler 
 from fifo import fifo 
@@ -23,17 +22,9 @@ import variables
 # distance between station and passing satellite 
 dis = 0 
 
-# satellite elevation 
-
-# queue dis 
-qdis = deque(maxlen=2)
-
 # theading lock 
 print_lock = threading.Lock()
     
-# delta time in second 
-deltaT = 1
-
 # satellite center frequency 
 center_frequency = 435880000 #Hz
 
@@ -57,8 +48,7 @@ class main :
         '''
         self.fifo = fifo(
                 callsign = self.callsign, 
-                variables = variables, 
-                datetime = date_time)
+                variables = variables)
 
         self.fifo.set_master_io(self.io) # Rule [1] 
         self.io.set_master_fifo(self.fifo) # Rule [1]
@@ -76,8 +66,7 @@ class main :
                 callsign = self.callsign,
                 fifo = self.fifo,
                 io = self.io,
-                mode = self.sstv_mode,
-                datetime = date_time
+                mode = self.sstv_mode
                 )
 
         self.tracker = Tracker(
@@ -101,19 +90,18 @@ class main :
 
     def main_thread(self): 
 
-        global dis, deltaT
+        global dis 
         
         append_status = False
 
         # last elevation
         el_last = ''
         while True :          
-            ''' apply serial read here '''
+            
             self.io.read_serial()
             self.fifo.encode_thread()    
             if self.calculate_az_el :  
                 el,az,dis = self.tracker.track()
-
                 self.distance = dis 
 
                 #append first distance 
@@ -132,16 +120,14 @@ if __name__ == "__main__":
 
     run = main()
     rx = direwolf('localhost', 8001)
-    radio = gqrx(center_frequency, deltaT)  
+    radio = gqrx(center_frequenc)  
 
     print('RUNNING')
     print_lock.acquire()
     p1 = threading.Thread(target=run.main_thread, args=()) 
     p2 = threading.Thread(target=run.recv_data, args=())
-#    p3 = threading.Thread(target=run.fifo.encode_thread, args=())
     p1.start()
     p2.start()
-#    p3.start()
 
     
     

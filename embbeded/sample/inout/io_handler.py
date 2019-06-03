@@ -1,4 +1,3 @@
-from datetime import datetime 
 from collections import deque 
 from module import image 
 from inout import camera_handler 
@@ -28,8 +27,6 @@ class io_handler :
         self.CAMERA_CAPTURE = 7 
         self.PTT = 12
         
-        self.datetime = kwargs['datetime']
-
         GPIO.setmode(GPIO.BOARD)
         GPIO.setup([self.P1, self.P2, self.CAMERA_CAPTURE], GPIO.IN, pull_up_down=GPIO.PUD_UP) 
         GPIO.setup([self.PTT], GPIO.OUT, initial=GPIO.LOW)
@@ -51,7 +48,6 @@ class io_handler :
     def set_camera_handler(self, **kwargs):
         self.camera_handler = camera_handler.camera_handler(
                     mode = kwargs['mode'],
-                    datetime = self.datetime,
                     fifo = self.master_fifo
                 )
 

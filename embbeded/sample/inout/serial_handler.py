@@ -21,4 +21,10 @@ class serial_handler :
             self.master_fifo.construct_message(
                     message=msg) 
 
+        elif com == b'MSL': 
+            msg = msg.decode('utf-8')
+            self.master_fifo.construct_message(
+                    message=msg,
+                    live=True) 
+
 

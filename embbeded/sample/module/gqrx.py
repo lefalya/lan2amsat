@@ -4,7 +4,7 @@ from datetime import datetime
 import telnetlib  
 
 class gqrx : 
-    def __init__(self, center_frequency, delta_t): 
+    def __init__(self, center_frequency): 
         self.center_frequency = center_frequency
         self.delta_t = delta_t 
         self.distance_deque = deque(maxlen=2)

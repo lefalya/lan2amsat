@@ -34,7 +34,6 @@ class fifo:
             data.set_buff_path(wav_buff_path) 
 
             if (data.get_live() == True):
-                print('live command')
                 self.fifo.appendleft(data)
                 self.master_io.ptt_high()
                 time.sleep(0.5)

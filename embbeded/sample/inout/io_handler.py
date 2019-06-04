@@ -14,10 +14,14 @@ class io_handler :
         # Injected instance, apply rule [2]
         self.master_fifo = ''
         self.sh = ''
+        self.ser = ''
 
-        self.ser = serial.Serial('/dev/ttyACM0',
-                9600,
-                timeout=0) 
+        try :
+            self.ser = serial.Serial('/dev/ttyACM0',
+                    9600,
+                    timeout=0) 
+        except : 
+            print('Running Without Serial Host')
 
         self.D_TX = 8
         self.D_RX = 10 
@@ -52,8 +56,11 @@ class io_handler :
                 )
 
     def read_serial(self):
-        data = self.ser.read(300) 
-        self.sh.parse(data) 
+        if self.ser != '' :
+            data = self.ser.read(300) 
+            self.sh.parse(data) 
+        else : 
+            data = '' 
 
     def write_serial(self, data): 
         self.ser.write(bytes(data, 'utf-8')) 

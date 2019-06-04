@@ -2,7 +2,7 @@ import os
 import cv2
 import PIL.Image
 from resizeimage import resizeimage 
-import date_time 
+from module import date_time 
 
 class image: 
 

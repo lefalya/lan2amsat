@@ -116,7 +116,7 @@ if __name__ == "__main__":
 
     run = main()
     rx = direwolf('localhost', 8001)
-    radio = gqrx(center_frequenc)  
+    radio = gqrx(center_frequency)  
 
     print('RUNNING')
     print_lock.acquire()

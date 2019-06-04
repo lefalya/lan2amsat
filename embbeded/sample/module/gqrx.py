@@ -6,7 +6,6 @@ import telnetlib
 class gqrx : 
     def __init__(self, center_frequency): 
         self.center_frequency = center_frequency
-        self.delta_t = delta_t 
         self.distance_deque = deque(maxlen=2)
         self.timeutc = deque(maxlen=2) 
         self.gqrx = telnetlib.Telnet("127.0.0.1", 7356) 

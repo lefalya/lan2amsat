@@ -1,5 +1,5 @@
 from model import event 
-import variables
+from model import variables
 
 class text_data(event): 
 

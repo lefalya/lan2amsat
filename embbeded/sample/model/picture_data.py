@@ -1,5 +1,5 @@
 from model import event
-import variables 
+from model import variables 
 
 class picture_data(event): 
 

@@ -1,4 +1,5 @@
 from skyfield.api import Topos, load
+from astropy import units as u 
 from module import tle 
 from datetime import datetime 
 
@@ -30,12 +31,15 @@ class Tracker :
         el,az,distance = topocentric.altaz()
         d = distance.m
 
-        self.el = el 
-        self.az = az 
+        self.el = self.formatDegree(el.to(u.deg))
+        self.az = self.formatDegree(az.to(u.deg))
         self.dis = d
 
         return el,az,d
-    
+     
+    def formatDegree(self, deg): 
+        return '{0:0.03f}'.format(deg) 
+
     def print_azeldis(self): 
         print("\n")
         print(self.satellite)

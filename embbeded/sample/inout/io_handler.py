@@ -27,8 +27,8 @@ class io_handler :
         self.D_RX = 10 
         self.P1 = 11
         self.P2 = 13
-        self.AOS_SAT = 15
-        self.CAMERA_CAPTURE = 7 
+        self.AOS_SAT = 16
+        self.CAMERA_CAPTURE = 18 
         self.PTT = 12
         
         GPIO.setmode(GPIO.BOARD)

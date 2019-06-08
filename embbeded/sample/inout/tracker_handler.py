@@ -6,8 +6,16 @@ class Tracker_handler :
     def parse_az_el(self, az, el): 
         az = round(float(az.split()[0])) 
         el = round(float(el.split()[0]))
+
+        if(el < 0) :
+            el = 0
+
+        # W Command
+        # ---------
+        # Read more : http://ok1dx.cz/constructions/avrot/AVROT_M.htm
         com = 'W'+self.to_string(az)+' '+self.to_string(el)
-#        self.master_io.command_tracker(com)
+        print(com)
+        return com
 
     def to_string(self, num):
         numStr = str(num) 

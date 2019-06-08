@@ -7,6 +7,7 @@ class Tracker :
     def __init__(self, **kwargs): 
         self.latitude = kwargs['latitude']
         self.longitude = kwargs['longitude']
+        self.master_io = kwargs['master_io']
 
         self.satellite = '' 
         self.el = ''
@@ -34,7 +35,7 @@ class Tracker :
         self.el = self.formatDegree(el.to(u.deg))
         self.az = self.formatDegree(az.to(u.deg))
         self.dis = d
-
+        
         return el,az,d
      
     def formatDegree(self, deg): 
@@ -46,4 +47,8 @@ class Tracker :
         print("elevation    : ", self.el)
         print("azimuth      : ", self.az) 
         print("slant range  : ", self.dis)
+    
+    def set_an_tracker(self):
+        # Send az el to antenna tracker 
+        self.master_io.command_tracker(self.az, self.el)
 

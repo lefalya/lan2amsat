@@ -2,6 +2,7 @@ from collections import deque
 from module import image 
 from inout import camera_handler 
 from inout import serial_handler
+from inout import tracker_handler
 
 import RPi.GPIO as GPIO 
 import time
@@ -9,19 +10,31 @@ import serial
 
 class io_handler : 
 
-    def __init__(self, **kwargs): 
+    def __init__(self): 
 
         # Injected instance, apply rule [2]
         self.master_fifo = ''
-        self.sh = ''
-        self.ser = ''
 
+        self.sh = '' # Serial Handler
+        self.th = tracker_handler.Tracker_handler(self) # Tracker handler 
+        self.ser = '' # Serial Connection
+        self.tracker = '' # Tracker Connection
+        
+        # Create connection with sensor host 
         try :
             self.ser = serial.Serial('/dev/ttyACM0',
                     9600,
                     timeout=0) 
         except : 
-            print('Running Without Serial Host')
+            print('[+] Running without serial host')
+
+        # Create connection with antenna tracker
+        try : 
+            self.tracker = serial.Serial('/dev/ttyS0', 
+                    9600,
+                    timeout=0)
+        except : 
+            print('[+] Running without antenna tracker.') 
 
         self.D_TX = 8
         self.D_RX = 10 
@@ -62,13 +75,22 @@ class io_handler :
         else : 
             data = '' 
 
-    def write_serial(self, data): 
-        self.ser.write(bytes(data, 'utf-8')) 
+    def write_serial(self, data):
+        if self.ser != '':
+            self.ser.write(bytes(data, 'utf-8')) 
+        else:
+            data = '' 
+
+    def command_tracker(self, az, el):
+        com = self.th.parse_az_el(az, el)
+        if self.tracker != '':
+            self.tracker.write(bytes(com, 'utf-8'))
+        else:
+            data = '' 
 
     def handle(self, pin):
         if(pin == self.CAMERA_CAPTURE): 
-            print('PIN ACTIVATED')
-#            self.camera_handler.trigger()             
+            self.camera_handler.trigger()             
     
     def ptt_high(self):
         GPIO.output(self.PTT, GPIO.HIGH)

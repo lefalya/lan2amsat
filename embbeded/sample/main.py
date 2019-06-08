@@ -38,7 +38,7 @@ class main :
         ''' 
         datetime -> io_handler -> camera_handler -> image'
         '''
-        self.io = io_handler(datetime = date_time) 
+        self.io = io_handler() 
         
         ''' 
         callsign -> fifo -> encoder'  
@@ -67,7 +67,8 @@ class main :
 
         self.tracker = Tracker(
                 latitude = '6.2405 S',
-                longitude = '106.9501 E')
+                longitude = '106.9501 E',
+                master_io = self.io)
 
     def set_frequency(self) : 
         radio.correct_doppler(self.distance)
@@ -107,6 +108,7 @@ class main :
 
                 if str(el) != el_last :
                     self.tracker.print_azeldis() 
+                    self.tracker.set_an_tracker() 
                     self.set_frequency()
                     print('FIFO Contents : ', self.fifo.fifo) 
                     print('ENCODE_BUFF Contents : ', self.fifo.encode_buff)                 

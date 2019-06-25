@@ -25,6 +25,7 @@ class io_handler :
             self.ser = serial.Serial('/dev/ttyACM0',
                     9600,
                     timeout=0) 
+            self.ser.reset_input_buffer()
         except : 
             print('[+] Running without serial host')
 
@@ -70,7 +71,7 @@ class io_handler :
 
     def read_serial(self):
         if self.ser != '' :
-            data = self.ser.read(300) 
+            data = self.ser.read(1) 
             self.sh.parse(data) 
         else : 
             data = '' 

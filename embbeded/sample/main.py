@@ -107,11 +107,11 @@ class main :
                     append_status = True 
 
                 if str(el) != el_last :
-                    self.tracker.print_azeldis() 
+                    #self.tracker.print_azeldis() 
                     self.tracker.set_an_tracker() 
                     self.set_frequency()
-                    print('FIFO Contents : ', self.fifo.fifo) 
-                    print('ENCODE_BUFF Contents : ', self.fifo.encode_buff)                 
+                    #print('FIFO Contents : ', self.fifo.fifo) 
+                    #print('ENCODE_BUFF Contents : ', self.fifo.encode_buff)                 
                     el_last = str(el)
 
 if __name__ == "__main__": 

@@ -110,9 +110,8 @@ class fifo:
     def construct_message(self, **kwargs): 
         txt = text_data()
         txt.set_date(date_time.get_time_utc_str()) 
-        txt.set_text(message=kwargs['message']
-                +";"
-                +self.callsign)
+        txt.set_callsign(self.callsign)
+        txt.set_text(message=kwargs['message'])
 
         if 'live' in kwargs:
             txt.set_live(True)

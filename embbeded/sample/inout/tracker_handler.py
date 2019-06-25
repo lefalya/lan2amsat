@@ -14,7 +14,6 @@ class Tracker_handler :
         # ---------
         # Read more : http://ok1dx.cz/constructions/avrot/AVROT_M.htm
         com = 'W'+self.to_string(az)+' '+self.to_string(el)
-        print(com)
         return com
 
     def to_string(self, num):

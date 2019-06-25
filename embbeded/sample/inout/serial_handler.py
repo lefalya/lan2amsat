@@ -1,30 +1,44 @@
+from collections import deque 
 
 class serial_handler :
     def __init__(self, **kwargs):
         self.master_io = kwargs['master_io']
         self.master_fifo = kwargs['master_fifo']
+        
+        self.inCommand = ''
+        self.buffer = ''
 
-    def parse(self, data):
-        if b';' in data:
-            data = data.split(b';')
-            print(data)
-            com = data[0]
-            msg = data[1] 
-            self.com_w_msg(com, msg) 
+        self.deque = deque(maxlen=3)
     
-    def com_wt_msg(self, com): 
-        print('a') 
+    def parse(self,data):
+        self.enableBuffer(data) 
+        self.deque.append(data) 
+        if len(self.deque) == 3:
+            self.splitter(b''.join(self.deque))
 
-    def com_w_msg(self, com, msg): 
-        if com == b'MSG': 
-            msg = msg.decode('utf-8')
-            self.master_fifo.construct_message(
-                    message=msg) 
+    def enableBuffer(self,data):
+        if self.inCommand != '':
+            self.buffer = self.buffer+data.decode('utf-8')
 
-        elif com == b'MSL': 
-            msg = msg.decode('utf-8')
-            self.master_fifo.construct_message(
-                    message=msg,
-                    live=True) 
+    def splitter(self, com):
+        com = com.decode('utf-8')
 
+        if com == "MSL":
+            self.inCommand="MSL"
 
+        elif com == "END":
+            self.buffer = self.buffer.replace('END', '')
+            self.execute(command=self.inCommand, message=self.buffer)
+            self.inCommand = ''
+            self.buffer = ''
+
+    def execute(self, **kwargs):
+        if 'message' in kwargs : 
+            com = kwargs['command']
+            if com == 'MSL':
+                self.master_fifo.construct_message(
+                        message="MSL@@@"+kwargs['message'],
+                        live=True) 
+            elif com == 'MSG':
+                self.master_fifo.construct_message(
+                        message="MSG@@@"+kwargs['message'])

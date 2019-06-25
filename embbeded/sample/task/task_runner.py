@@ -11,13 +11,16 @@ class task_runner :
         self.master_io = kwargs['io']
         self.tle = tle()
         self.image = image(mode = kwargs['mode'])
+        self.delimiter = "@@@"
 
     def parse_command(self, callsign, message) :
         if callsign == self.callsign :
             self.execute(message)
 
     def execute(self, command):
-        if "#" not in command :
+
+        # @@@ is delimiter for command with message
+        if self.delimiter not in command :
             self.single_command(command)
         else: 
             self.command_with_message(command)
@@ -25,14 +28,14 @@ class task_runner :
     def single_command(self, command):
 
         if command == "LOOPBACK":
-            live_response = '200'
+            live_response = 'LOOPBACK'
             self.master_fifo.construct_message(
                     message=live_response,
                     live=True)
             
         # live image capture 
         if command == "CAPTURE" :
-            live_response = '201'
+            live_response = 'CAPTURE'
             self.master_fifo.construct_message(
                     message=live_response,
                     live=True)
@@ -53,7 +56,7 @@ class task_runner :
             self.master_fifo.pop_all()
 
     def command_with_message(self, buff):
-        buff = buff.split('#') 
+        buff = buff.split(self.delimiter) 
         command = buff[0]
         message = buff[1]
 
@@ -62,5 +65,6 @@ class task_runner :
             self.tle.set_tle(message)
             self.main.calculate_az_el = True 
 
-        if com == 'PAS':
-           self.io.write_serial(message) 
+        if command == 'PAS':
+            print(message)
+            self.master_io.write_serial(message) 

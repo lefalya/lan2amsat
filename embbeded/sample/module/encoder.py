@@ -13,7 +13,7 @@ class encoder :
 
     def encode_aprs(self, text):
         file_name = "./buff/aprs_wav_"+text.get_date().replace(' ','_')+'.wav'
-        com = "echo -n '"+self.callsign+">ARISS:"+text.get_text()+"' | gen_packets -a 100 -o "+file_name+" -"        
+        com = "echo -n '"+self.callsign+">CQ,ARISS:"+text.get_text()+"' | gen_packets -a 100 -o "+file_name+" -"        
         os.system(com)
 
         return file_name

@@ -29,9 +29,4 @@ class tle :
             tle_file.write(column)
             tle_file.write("\n")
         tle_file.close()
-
-        os.remove(self.path+"/../Leap_Second.dat")
-        os.remove(self.path+"/../deltat.data") 
-        os.remove(self.path+"/../deltat.preds")
-
         

@@ -16,7 +16,7 @@ class text_data(event):
         if 'image_date' in kwargs :
             text = 'IMGDT;DT;'+kwargs['image_date']+';ALT;'+kwargs['alt']
         else : 
-            text = self.callsign+';200;'+kwargs['message']
+            text = self.callsign+';'+kwargs['message']
         
         self.text = text
 

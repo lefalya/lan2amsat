@@ -2,7 +2,7 @@ from collections import deque
 from model import picture_data
 from model import text_data 
 from model import variables
-from module import encoder
+from inout import encoder
 from module import date_time
 import os 
 import time
@@ -14,14 +14,14 @@ class fifo:
         # FIFO 
         self.fifo = deque()
         self.callsign = kwargs['callsign'] 
-
+        self.mc_callsign = kwargs['mc_callsign']
         # Encode Buffer 
         self.encode_buff = deque()
 
         # Injected instance, apply rule [2] 
         self.master_io = ''         
 
-        self.encoder = encoder(callsign = kwargs['callsign'])
+        self.encoder = encoder(callsign=kwargs['callsign']) 
 
     # Inter-dependent class, apply rule [1] 
     def set_master_io(self, master_io): 
@@ -55,9 +55,8 @@ class fifo:
 
             os.system('rm '+bfpth) 
         except IndexError :
-            message = '400'
             self.construct_message(
-                    message=message,
+                    message="FIFONULL",
                     live=True)
             print('Index Error')
     
@@ -83,7 +82,9 @@ class fifo:
 
         msg = 'TXT;'+str(txt_count)+';IMG;'+str(img_count)
         txdt = text_data()
+        
         txdt.set_date(date_time.get_time_utc_str())
+        txt.set_callsign(self.mc_callsign)
         txdt.set_text(message=msg)
         txdt.set_live(True)
 
@@ -110,7 +111,7 @@ class fifo:
     def construct_message(self, **kwargs): 
         txt = text_data()
         txt.set_date(date_time.get_time_utc_str()) 
-        txt.set_callsign(self.callsign)
+        txt.set_callsign(self.mc_callsign)
         txt.set_text(message=kwargs['message'])
 
         if 'live' in kwargs:

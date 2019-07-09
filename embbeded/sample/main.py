@@ -2,13 +2,12 @@ from skyfield.api import Topos, load
 from collections import deque 
 from scipy.constants import c
 
-from module import direwolf 
 from module import gqrx 
-from module import tle
 from module import Tracker 
 from module import date_time 
 
-from task import task_runner
+from inout import tcom
+from inout import tcom_handler
 from inout import io_handler 
 from fifo import fifo 
 
@@ -27,11 +26,18 @@ print_lock = threading.Lock()
 # satellite center frequency 
 center_frequency = 435880000 #Hz
 
+# self callsign 
+callsign = "GSRASP"
+
+# mission control callsign 
+mc_callsign = "WORLD"
+
 class main : 
     
     def __init__(self):
         self.distance = 0 
-        self.callsign = "YB3MBN"
+        self.callsign = callsign
+        self.mc_callsign = mc_callsign
         self.sstv_mode = "Robot36"
         self.calculate_az_el = True
         
@@ -45,7 +51,8 @@ class main :
         variables -> fifo' -> encoder'
         datetime -> fifo' 
         '''
-        self.fifo = fifo(callsign = self.callsign)
+        self.fifo = fifo(callsign = self.callsign,
+                mc_callsign=self.mc_callsign)
         self.fifo.set_master_io(self.io) # Rule [1] 
         self.io.set_master_fifo(self.fifo) # Rule [1]
 
@@ -55,9 +62,9 @@ class main :
         self.io.set_camera_handler(mode = self.sstv_mode) # Rule [2]
         self.io.set_serial_handler() # Rule [2] 
         '''
-        main -> task_runner' 
+        main -> tcom_handler' 
         '''
-        self.task = task_runner(
+        self.task = tcom_handler(
                 main = self,
                 callsign = self.callsign,
                 fifo = self.fifo,
@@ -69,7 +76,7 @@ class main :
                 latitude = '6.2405 S',
                 longitude = '106.9501 E',
                 master_io = self.io)
-
+        
     def set_frequency(self) : 
         radio.correct_doppler(self.distance)
 
@@ -82,7 +89,7 @@ class main :
             if receive.closed == True : 
                 print_lock.release()
                 break
-
+            
             self.task.parse_command(receive.callsign, receive.message)
 
     def main_thread(self): 
@@ -117,7 +124,9 @@ class main :
 if __name__ == "__main__": 
 
     run = main()
-    rx = direwolf('localhost', 8001)
+    rx = tcom('localhost', 
+            8001)
+
     radio = gqrx(center_frequency)  
 
     print('RUNNING')

@@ -13,7 +13,8 @@ class Tracker :
         self.el = ''
         self.az = '' 
         self.dis = '' 
-
+        self.epoch = tle().satellite.epoch.utc_jpl()
+        
     def track(self): 
         tl = tle()
         self.satellite = tl.satellite
@@ -51,4 +52,6 @@ class Tracker :
     def set_an_tracker(self):
         # Send az el to antenna tracker 
         self.master_io.command_tracker(self.az, self.el)
-
+    
+    def get_epoch(self):
+        return self.epoch

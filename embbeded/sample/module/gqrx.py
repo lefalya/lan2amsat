@@ -30,3 +30,5 @@ class gqrx :
         if type(freq) != type(None) : 
             freq = str(round(freq)).split(".")[0]
             self.gqrx.write(("F "+freq+" \n").encode('ascii'))
+
+        return freq

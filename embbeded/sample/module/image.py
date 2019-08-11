@@ -23,8 +23,8 @@ class image:
             }[mode]
 
     def capture(self):
-        formated_time = date_time.get_time_utc_str()
-        filename = date_time.get_time_utc_filename()
+        formated_time = date_time.date_time.get_time_utc_str()
+        filename = date_time.date_time.get_time_utc_filename()
         filename = filename + '.jpg'
         path = './capture/'+filename 
         camera = cv2.VideoCapture(0) 

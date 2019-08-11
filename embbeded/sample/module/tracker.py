@@ -42,6 +42,9 @@ class Tracker :
     def formatDegree(self, deg): 
         return '{0:0.03f}'.format(deg) 
 
+    def print_el(self):
+        return self.el
+
     def print_azeldis(self): 
         print("\n")
         print(self.satellite)

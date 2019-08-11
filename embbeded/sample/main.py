@@ -31,7 +31,7 @@ callsign = "GSRASP"
 
 # mission control callsign 
 mc_callsign = "WORLD"
-
+        
 class main : 
     
     def __init__(self):
@@ -40,7 +40,7 @@ class main :
         self.mc_callsign = mc_callsign
         self.sstv_mode = "Robot36"
         self.calculate_az_el = True
-        
+       
         ''' 
         datetime -> io_handler -> camera_handler -> image'
         '''
@@ -77,8 +77,10 @@ class main :
                 longitude = '106.9501 E',
                 master_io = self.io)
         
+        self.dopFreq = ''
+        
     def set_frequency(self) : 
-        radio.correct_doppler(self.distance)
+        self.dopFreq = radio.correct_doppler(self.distance)
 
     def get_fifo(self):
         return self.fifo.encode_thread()
@@ -103,7 +105,7 @@ class main :
         while True :          
             
             self.io.read_serial()
-            self.fifo.encode_thread()    
+            #self.fifo.encode_thread()    
             if self.calculate_az_el :  
                 el,az,dis = self.tracker.track()
                 self.distance = dis 
@@ -114,9 +116,14 @@ class main :
                     append_status = True 
 
                 if str(el) != el_last :
-                    #self.tracker.print_azeldis() 
+                    self.tracker.print_azeldis() 
                     self.tracker.set_an_tracker() 
-                    #self.set_frequency()
+                    self.set_frequency()
+                    toWrite = self.tracker.print_el().split(' ')[0]+' '+self.dopFreq+'\n'
+                    print('toWrite : '+toWrite)
+                    with open('eldop.txt', 'a+') as f :
+                        f.write(toWrite) 
+
                     #print('FIFO Contents : ', self.fifo.fifo) 
                     #print('ENCODE_BUFF Contents : ', self.fifo.encode_buff)                 
                     el_last = str(el)
@@ -133,8 +140,10 @@ if __name__ == "__main__":
     print_lock.acquire()
     p1 = threading.Thread(target=run.main_thread, args=()) 
     p2 = threading.Thread(target=run.recv_data, args=())
+    p3 = threading.Thread(target=run.get_fifo, args=())
     p1.start()
     p2.start()
+    p3.start()
 
     
     
